@@ -1,5 +1,6 @@
 package com.coffeeshop42.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 		
 	Optional<Usuario> findById(Long id);
 	Optional<Usuario> findByUsername(String username);
-	Optional<Produto> findByName(String nome);
+	List<Usuario> findByNomeContaining(String nome);
+
 }
