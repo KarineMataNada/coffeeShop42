@@ -5,28 +5,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.caffeteria.cafe.model.Cafe;
 import com.coffeeshop42.dto.LoginResponse;
-import com.coffeeshop42.exception.ResourceInternalServerError.ResourceNotFoundException;
+import com.coffeeshop42.exception.ResourceNotFoundException;
 import com.coffeeshop42.model.Usuario;
 import com.coffeeshop42.repository.UsuarioRepository;
 import com.coffeeshop42.security.JWTService;
 
-import br.com.serratec.padaria1.produto.Produto;
-import io.swagger.annotations.ApiOperation;
+
 
 @Service
 public class UsuarioService {
@@ -53,6 +45,11 @@ public class UsuarioService {
 		return repositorioUsuario.findById(id);
 	}
 	
+
+	public Optional<Usuario> obterPorNome(String nome) {
+		return repositorioUsuario.findByName(nome);
+	}
+	
 	public Usuario adicionar(Usuario usuario) {
 		usuario.setId(null);
 		
@@ -66,21 +63,32 @@ public class UsuarioService {
 		return repositorioUsuario.save(usuario);
 		
 	}
-	//put
-    public Optional<Usuario> atualizar(Long id) {
-        Optional<Usuario> usuario = repositorioUsuario.findById(id);
+	//PUT
+	 public Usuario atualizar(Usuario usuario, Long id) {
+		 Optional<Usuario> usuarioAtt = repositorioUsuario.findById(id);
+		 
+		if(repositorioUsuario.findById(usuario.getId()).isEmpty()) {
+			throw new ResourceNotFoundException("Usuario não encontrado por id");
+		}
+		repositorioUsuario.deleteById(id);		
+		return repositorioUsuario.save(usuario);
+		
+	}
+//	//put
+//    public Optional<Usuario> atualizar(Long id) {
+//        Optional<Usuario> usuario = repositorioUsuario.findById(id);
+//
+//        if (usuario.isEmpty()) {
+//            throw ResourceNotFoundException("Usuario não encontrado por id");
+//        }
+//        usuario.setId(id);
+//        usuario.remove(usuario);
+//        this.repositorioUsuario.save(usuario);
+//        return usuarioAtt;
+//    }
+//	
 
-        if (usuario.isEmpty()) {
-            throw ResourceNotFoundException("Usuario não encontrado por id");
-        }
-        usuario.setId(id);
-        usuario.remove(usuario);
-        this.repositorioUsuario.save(usuario);
-        return usuarioAtt;
-    }
-	
-
-	public void deletar(@PathVariable(value = "id") Long id) {
+	public void deletar(Long id) {
 	 this.repositorioUsuario.deleteById(id);
 }
 	
