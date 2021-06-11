@@ -40,4 +40,30 @@ public class ApiHandleException {
 		return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
 		
 	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handlerInternalServerError(Exception exception){
+		ErrorMessage errorMessage = new ErrorMessage(
+				"Internal Server Error",
+				HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				exception.getMessage(),
+				exception.getClass().getName(),
+				new Date().getTime());
+		
+		return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handle(Exception exception){
+		ErrorMessage errorMessage = new ErrorMessage(
+				"403 Forbidden",
+				HttpStatus.FORBIDDEN.value(),
+				exception.getMessage(),
+				exception.getClass().getName(),
+				new Date().getTime());
+		
+		return new ResponseEntity<>(errorMessage, HttpStatus.FORBIDDEN);
+	}
+
+	
 }
