@@ -36,18 +36,32 @@ public class UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEnconder;
+    
 	
 	public List<Usuario> obterTodos() {
 		return repositorioUsuario.findAll();
 	}
 	
+	
 	public Optional<Usuario> obterPorId(Long id) {
+		 Optional<Usuario> usuario = repositorioUsuario.findById(id);	 
+		
+		 if(usuario.isEmpty()) {
+			throw new ResourceNotFoundException("Usuario não encontrado!");
+		}
+		 
 		return repositorioUsuario.findById(id);
 	}
 	
+	
 
-	public Optional<Usuario> obterPorNome(String nome) {
-		return repositorioUsuario.findByName(nome);
+	public List<Usuario> obterPorNome(String nome) {
+		
+		if(nome.isEmpty()) {
+			throw new ResourceNotFoundException("Usuario não encontrado!");
+		}
+		
+		return repositorioUsuario.findByNomeContaining(nome);
 	}
 	
 	public Usuario adicionar(Usuario usuario) {
@@ -63,33 +77,27 @@ public class UsuarioService {
 		return repositorioUsuario.save(usuario);
 		
 	}
-	//PUT
+	
 	 public Usuario atualizar(Usuario usuario, Long id) {
 		 Optional<Usuario> usuarioAtt = repositorioUsuario.findById(id);
 		 
-		if(repositorioUsuario.findById(usuario.getId()).isEmpty()) {
+		if(usuarioAtt.isEmpty()) {
 			throw new ResourceNotFoundException("Usuario não encontrado por id");
 		}
 		repositorioUsuario.deleteById(id);		
 		return repositorioUsuario.save(usuario);
 		
 	}
-//	//put
-//    public Optional<Usuario> atualizar(Long id) {
-//        Optional<Usuario> usuario = repositorioUsuario.findById(id);
-//
-//        if (usuario.isEmpty()) {
-//            throw ResourceNotFoundException("Usuario não encontrado por id");
-//        }
-//        usuario.setId(id);
-//        usuario.remove(usuario);
-//        this.repositorioUsuario.save(usuario);
-//        return usuarioAtt;
-//    }
-//	
+
 
 	public void deletar(Long id) {
-	 this.repositorioUsuario.deleteById(id);
+	    Optional<Usuario> deletarUsuario = repositorioUsuario.findById(id);
+		
+	    if(deletarUsuario.isEmpty()) {
+			throw new ResourceNotFoundException("Usuario não encontrado por id");
+		}
+	    
+		repositorioUsuario.deleteById(id);	 
 }
 	
 	public LoginResponse logar(String username, String senha) {
