@@ -1,6 +1,6 @@
-package com.coffeeshop42.model;
+package com.cafeteria.model;
 
-import java.util.Collection;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,18 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "generator_usuario", sequenceName = "sequence_usuario", initialValue = 1, allocationSize = 1)
-public class Usuario implements UserDetails {
+public class Usuario{
 
-
-	private static final long serialVersionUID = -6463936750333420403L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_usuario")
@@ -31,7 +24,7 @@ public class Usuario implements UserDetails {
 	@Column(nullable = false, length = 60)
 	private String email; 
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 60)
 	private String username;
 	
 	@Column(nullable = false, length = 60)
@@ -40,23 +33,19 @@ public class Usuario implements UserDetails {
 	@Column(nullable = false, length = 60)
 	private String nome;
 	
-	@Column(nullable = false, length = 11)
+	@Column(nullable = false, length = 60)
 	private String cpf;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 60)
 	private String telefone;
 	
-	@Column(nullable = false, length = 10)
-	private Date dataNascimento;
-	
-	@Column(nullable = false)
-	private Endereco endereco_id;
+//	@Column
+//	private Date dataNascimento;
 	
 	public Usuario() {}
 	
-	public Usuario(Long id, String email, String username, String senha, String nome, String cpf, String telefone,
-			Date dataNascimento, Endereco endereco_id) {
-		super();
+	public Usuario(Long id, String email, String username, String senha, String nome, String cpf, String telefone) {
+	
 		this.id = id;
 		this.email = email;
 		this.username = username;
@@ -64,8 +53,8 @@ public class Usuario implements UserDetails {
 		this.nome = nome;
 		this.cpf = cpf;
 		this.telefone = telefone;
-		this.dataNascimento = dataNascimento;
-		this.endereco_id = endereco_id;
+//		this.dataNascimento = dataNascimento;
+		
 	}
 
 	public Long getId() {
@@ -124,64 +113,6 @@ public class Usuario implements UserDetails {
 		this.telefone = telefone;
 	}
 	
-	public Date getDataNascimento() {
-		return dataNascimento;
-	}
-	
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
-	}
-	
-	public Endereco getEndereco_id() {
-		return endereco_id;
-	}
-	
-	public void setEndereco_id(Endereco endereco_id) {
-		this.endereco_id = endereco_id;
-	}
 
-	
-	@Override
-	@JsonIgnore
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-	
-		return null;
-	}
-
-	@Override
-	@JsonIgnore
-	public String getPassword() {
-		
-		return senha;
-	}
-	
-	@Override
-	@JsonIgnore
-	public boolean isAccountNonExpired() {
-	
-		return false;
-	}
-
-	@Override
-	@JsonIgnore
-	public boolean isAccountNonLocked() {
-
-		return false;
-	}
-
-	@Override
-	@JsonIgnore
-	public boolean isCredentialsNonExpired() {
-	
-		return false;
-	}
-
-	@Override
-	@JsonIgnore
-	public boolean isEnabled() {
-		
-		return false;
-	}
-	
 	
 }
