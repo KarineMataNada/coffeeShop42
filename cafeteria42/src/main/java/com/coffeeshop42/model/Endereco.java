@@ -1,4 +1,4 @@
-package com.coffeeshop42.model;
+package com.cafeteria.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -120,3 +120,4 @@ public class Endereco {
 	
 	
 }
+
